@@ -16,13 +16,30 @@ def get_user_input():
             print("Not a option")
             user_input = input("Choose the sport (Ufc:Ufc, Box: Boxing): ")
         else:
-            return user_input
+            return user_input.lower()
 
 
 data = {
-    "Maincard-fight": "", "Date" : "", 'Time': "", "Location" : ""
+    "Maincard-fight": [], "Date" : "", 'Time': "", "Location" : ""
 }
 
 
-print(BOX_SOUP.prettify())
+def get_boxing_fights():
+    fight_titles = BOX_SOUP.find_all('div',)
+
+def get_ufc_fights():
+    pass
+
+
+def main():
+    if get_user_input == 'ufc':
+        get_ufc_fights()
+    elif get_user_input == 'box':
+        get_boxing_fights()
+
+    
+if __name__ == '__main__':
+    pass
+
+
 
