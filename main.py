@@ -73,14 +73,13 @@ def ufc_printer():
         print(f"Main event: {key} on date: {value}\n")
 
 def write_to_file(fightlis,datelis,sport):
-    with open('data.json','a') as f:
+    with open('data.json','w') as f:
         f.write(f"\nUpcoming {sport} fights on {DATE.today()}")
         for fight,date in zip(fightlis,datelis):
             f.write(f"  Main event: {fight} on date: {date}\n")
 
 
 def main():
-    clear_console()
     a = get_user_input()
     clear_console()
     if a == 'ufc':
@@ -88,7 +87,6 @@ def main():
         fight_lis,date_lis = get_ufc_fights()
         write_to_file(fight_lis,date_lis,'UFC')
     elif a == 'box':
-        clear_console()
         print_boxing()
         fight_lis,date_lis = get_boxing_fights()
         write_to_file(fight_lis,date_lis,'Boxing')
