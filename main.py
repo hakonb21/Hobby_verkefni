@@ -1,13 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
 import os
+from datetime import date as DATE
 
 UFC = requests.get('https://www.espn.com/mma/schedule/_/league/ufc')
 BOX = requests.get('http://fightnights.com/upcoming-boxing-schedule')
 
 UFC_SOUP = BeautifulSoup(UFC.text,'html.parser')
 BOX_SOUP = BeautifulSoup(BOX.text, 'html.parser')
-
 
 
 def clear_console():
@@ -28,28 +28,27 @@ def get_user_input():
             return user_input.lower()
 
 
-data = {
-    "Maincard-fight": [], "Date" : "", 'Time': "", "Location" : ""
-}
-
-
 def get_boxing_fights():
-    date_dict = {}
+    fight_list = []
+    datelisTemp = []
+    date_list = []
     fight_titles = BOX_SOUP.find_all('ul',class_ = 'event-list')
     for item in fight_titles:
-        for i in item.find_all("span",class_ = 'month'):
-            if len(i) < 4:
-                date_dict[i] = i
-    print(date_dict)
+        for i in item.find_all('h2',class_ = 'title'):
+            fight_list.append(i.get_text())
+        for j in item.find_all('span',class_= 'month'):
+            datelisTemp.append(j.get_text())
+    for month in datelisTemp[::2]:
+        for day in datelisTemp[1::2]:
+            date_list.append(month + day)
+    return fight_list,date_list
 
+def print_boxing():
+    fight_list,date_list = get_boxing_fights()
 
-# def get_ufc_fights():
-#     fight_list = []
-#     ufc_fights = UFC_SOUP.find('div',class_ = 'Table__Scroller')
-#     for info in ufc_fights:
-#         for fight in info.find_all('tr',class_ = 'Table__TR Table__TR--sm Table__even'):
-#             for card in fight.find_all('a',class_ = 'AnchorLink'):
-#                 print(card.prettify())
+    for fight, date in zip(fight_list,date_list):
+        print(f"Main event: {fight} on date: {date} \n")
+
 
 def get_ufc_fights():
     fight_list = []
@@ -65,24 +64,38 @@ def get_ufc_fights():
         date_list.append(j.get_text())
     return fight_list,date_list
 
-def make_pretty():
+def ufc_printer():
     data = {}
     fight_list, date_list = get_ufc_fights()
     for fight,date in zip(fight_list,date_list):
         data[fight] = date
     for key,value in data.items():
-        print(f"Main event: {key} on date: {value}")
+        print(f"Main event: {key} on date: {value}\n")
 
+def write_to_file(fightlis,datelis,sport):
+    with open('data.json','a') as f:
+        f.write(f"\nUpcoming {sport} fights on {DATE.today()}")
+        for fight,date in zip(fightlis,datelis):
+            f.write(f"  Main event: {fight} on date: {date}\n")
 
 
 def main():
-    if get_user_input == 'ufc':
-        get_ufc_fights()
-    elif get_user_input == 'box':
-        get_boxing_fights()
+    clear_console()
+    a = get_user_input()
+    clear_console()
+    if a == 'ufc':
+        ufc_printer()
+        fight_lis,date_lis = get_ufc_fights()
+        write_to_file(fight_lis,date_lis,'UFC')
+    elif a == 'box':
+        clear_console()
+        print_boxing()
+        fight_lis,date_lis = get_boxing_fights()
+        write_to_file(fight_lis,date_lis,'Boxing')
+        
 
     
 if __name__ == '__main__':
-    pass
+    main()
 
-make_pretty()
+
