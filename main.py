@@ -52,15 +52,26 @@ def get_boxing_fights():
 #                 print(card.prettify())
 
 def get_ufc_fights():
-    link_lists = []
     fight_list = []
+    date_list = []
     ufc_fights = UFC_SOUP.find('table',class_ = 'Table')
     for line in ufc_fights.find_all('a',class_= 'AnchorLink'):
-        link_lists.append(line.get('href'))
-        fight_list.append(line.get_text())
-    for i in fight_list:
-        print(i)
+        if len(line.get_text()) > 2:
+            if line.get_text().split()[1] in ['PM','AM']:
+                pass
+            else:
+                fight_list.append(line.get_text())
+    for j in ufc_fights.find_all('span',class_ = 'date__innerCell'):
+        date_list.append(j.get_text())
+    return fight_list,date_list
 
+def make_pretty():
+    data = {}
+    fight_list, date_list = get_ufc_fights()
+    for fight,date in zip(fight_list,date_list):
+        data[fight] = date
+    for key,value in data.items():
+        print(f"Main event: {key} on date: {value}")
 
 
 
@@ -74,4 +85,4 @@ def main():
 if __name__ == '__main__':
     pass
 
-get_ufc_fights()
+make_pretty()
