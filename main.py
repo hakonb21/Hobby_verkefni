@@ -43,13 +43,23 @@ def get_boxing_fights():
     print(date_dict)
 
 
+# def get_ufc_fights():
+#     fight_list = []
+#     ufc_fights = UFC_SOUP.find('div',class_ = 'Table__Scroller')
+#     for info in ufc_fights:
+#         for fight in info.find_all('tr',class_ = 'Table__TR Table__TR--sm Table__even'):
+#             for card in fight.find_all('a',class_ = 'AnchorLink'):
+#                 print(card.prettify())
+
 def get_ufc_fights():
+    link_lists = []
     fight_list = []
-    ufc_fights = UFC_SOUP.find('div',class_ = 'Table__Scroller')
-    for info in ufc_fights:
-        for fight in info.find_all('tr',class_ = 'Table__TR Table__TR--sm Table__even'):
-            for card in fight.find_all('a',class_ = 'AnchorLink'):
-                print(card)
+    ufc_fights = UFC_SOUP.find('table',class_ = 'Table')
+    for line in ufc_fights.find_all('a',class_= 'AnchorLink'):
+        link_lists.append(line.get('href'))
+        fight_list.append(line.get_text())
+    for i in fight_list:
+        print(i)
 
 
 
