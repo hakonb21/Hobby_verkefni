@@ -11,7 +11,8 @@ BOX_SOUP = BeautifulSoup(BOX.text, 'html.parser')
 
 # Forritið leyfir notandanum að velja á milli þess að fá niðurstöður 
 # um næstu box bardaga eða næstu ufc bardaga, forritið nær í þessar upplýsingar með 
-# því að webscrape-a
+# því að webscrape-a, forritið skrifar svo þessar niðurstöður í data.json,
+# ef notandi myndi vilja kíkja á það eftir einhvern tíma.
 
 
 def clear_console():
