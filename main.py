@@ -9,6 +9,10 @@ BOX = requests.get('http://fightnights.com/upcoming-boxing-schedule')
 UFC_SOUP = BeautifulSoup(UFC.text,'html.parser')
 BOX_SOUP = BeautifulSoup(BOX.text, 'html.parser')
 
+# Forritið leyfir notandanum að velja á milli þess að fá niðurstöður 
+# um næstu box bardaga eða næstu ufc bardaga, forritið nær í þessar upplýsingar með 
+# því að webscrape-a
+
 
 def clear_console():
     if os.name in ('nt', 'dos'):
